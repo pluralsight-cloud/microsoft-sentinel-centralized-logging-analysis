@@ -1,0 +1,18 @@
+SecurityIncident
+| where * has 'malware'
+| project TimeGenerated, Title, Description, Severity, Status, IncidentNumber
+| order by TimeGenerated desc
+
+SecurityIncident
+| where * has 'malware'
+| summarize TotalIncidents = count()
+SecurityIncident
+| where * has 'malware'
+| summarize Count = count() by bin(TimeGenerated, 1d)
+
+SecurityIncident
+| where * has 'malware'
+| summarize Count = count() by Day = bin(TimeGenerated, 1d)
+| extend DayFormatted = format_datetime(Day, 'yyyy-MM-dd')
+| project DayFormatted, Count
+| render barchart
